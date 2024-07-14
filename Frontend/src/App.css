@@ -1,42 +1,45 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* App.css */
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Sports.css */
+
+.sports-container {
+  width: 100%; /* Ensure the container takes full width */
+  overflow: hidden; /* Hide overflow to create the sliding effect */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.sports-container .flex {
+  display: flex;
+  transition: transform 2s ease; /* Slower transition for smoother movement */
 }
 
-.card {
-  padding: 2em;
+.sport-card {
+  min-width: 250px; /* Adjust based on your card size */
+  margin: 0 10px; /* Adjust margins between cards */
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
-.read-the-docs {
-  color: #888;
+.sport-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.sport-card h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 10px;
 }

@@ -5,6 +5,7 @@ export type ISportComplex = {
   address: string;
   phone: string;
   email: string;
+  city:string;
   description: string;
   deleted: boolean;
   createdAt: Date;
@@ -27,6 +28,10 @@ export const sportComplexSchema: Schema = new Schema(
     address: {
       type: String,
       required: true,
+    },
+    city:{
+      type:String,
+      required:true,
     },
     phone: {
       type: String,

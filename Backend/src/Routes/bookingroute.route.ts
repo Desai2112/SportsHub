@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addComplex,getComplexDetails,showAllComplex } from "../Controllers/sportcomplexs.controller";
+import { addComplex,findComplexbySports,findComplexebyCity,getComplexDetails,showAllComplex } from "../Controllers/sportcomplexs.controller";
 import isManager from "../Middlewares/isManager";
 import isAuthenticated from "../Middlewares/isAuthenticated";
 import isUser from "../Middlewares/isUser";
@@ -13,6 +13,10 @@ router.get("/getComplexDetails/:complexId",isAuthenticated,getComplexDetails);
 router.get("/showall",isAuthenticated,showAllComplex);
 router.post("/add",isAuthenticated,isUser,bookComplex)
 router.post("/availability",isAuthenticated,seeAvailability)
+router.get("/sport/:sportName",findComplexbySports);
+router.get("/city/:city",findComplexebyCity);
+
+
 
 
 export default router;
