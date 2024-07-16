@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable react/prop-types */
+import  { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import { AiOutlineUser, AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
@@ -6,6 +7,7 @@ import { AiOutlineUser, AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 const PlayerSignUp = ({ onSubmit }) => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [showPassword, setShowPassword] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [file, setFile] = useState(null);
 
   const togglePasswordVisibility = () => {

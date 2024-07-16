@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import { FcGoogle } from 'react-icons/fc';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
@@ -50,26 +51,20 @@ const Login = () => {
             <input
               id="password"
               type={showPassword ? 'text' : 'password'}
-              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-300 ${
                 errors.password ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-500'
               }`}
               {...register('password', { required: 'Password is required' })}
             />
             <button
               type="button"
-              className="absolute inset-y-0 right-0 flex items-center px-4 focus:outline-none"
+              className="absolute inset-y-0 right-0 flex items-center px-4 pt-8 focus:outline-none"
               onClick={togglePasswordVisibility}
             >
               {showPassword ? (
-                <svg className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <AiFillEyeInvisible className="h-5 w-5 text-gray-500" />
               ) : (
-                <svg className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M9 12a3 3 0 016 0m-6 0a3 3 0 016 0" />
-                </svg>
+                <AiFillEye className="h-5 w-5 text-gray-500" />
               )}
             </button>
             {errors.password && (

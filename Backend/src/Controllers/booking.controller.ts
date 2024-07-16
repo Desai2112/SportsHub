@@ -146,7 +146,7 @@ const seeAvailability = async (req: Request, res: Response) => {
           endTime: { $lte: new Date(endTime) },
         },
       ],
-    });
+    }); 
 
     const maintenances = await GroundMaintenanceLog.find({
       sportComplex: sportComplexId,

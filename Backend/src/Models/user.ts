@@ -3,11 +3,11 @@ import bcrypt from "bcrypt";
 
 export enum userRole {
   user = "User",
-  admin = "Admin",
   manager = "Manager",
 }
 
 export type IUser = {
+  googleId?: string;
   name: string;
   email: string;
   password: string;
@@ -15,7 +15,8 @@ export type IUser = {
   deleted: boolean;
   createdAt: Date;
   updatedAt: Date;
-  mobileNo:string;
+  mobileNo: string;
+  profilePic: string;
 };
 
 export type IUserModel = IUser &
@@ -53,6 +54,15 @@ export const userSchema: Schema = new Schema(
     mobileNo: {
       type: String,
       required: true,
+    },
+    profilePic: {
+      type: String,
+      required: true,
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
     },
   },
   {

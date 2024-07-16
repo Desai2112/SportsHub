@@ -8,6 +8,7 @@ export type SignUpBodyType = {
   email: string;
   password: string;
   mobileNo:string;
+  role?:userRole;
 };
 
 export type loginResponseBodyType = {
@@ -33,6 +34,7 @@ export type SignUpResponseBodyType = {
     mobileNo:string;
     createdAt: Date;
     updatedAt: Date;
+    profilePic:String;
   };
   success: Boolean;
 };

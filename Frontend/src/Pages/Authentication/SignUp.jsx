@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import PlayerSignUp from '../../Components/SignUp/Player';
@@ -25,13 +26,13 @@ const SignUp = () => {
         transition={{ duration: 0.5 }}
       >
         <div className="w-1/2 flex flex-col items-center justify-center p-4">
-          <img src={'https://res.cloudinary.com/dgvslio7u/image/upload/v1720845639/tofmmxz1oj8lvexsqaet.png'} alt="Company Logo" className="w-16 h-auto mb-2" />
+          <img src={'https://res.cloudinary.com/dgvslio7u/image/upload/v1720845639/tofmmxz1oj8lvexsqaet.png'} alt="Company Logo" className="w-auto h-20 mb-2" />
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-4">Sign Up</h2>
         </div>
         <div className="w-1/2 flex flex-col items-center justify-center p-4">
           <div className="flex justify-center mb-4 relative">
             <motion.button
-              className={`px-3 py-1 rounded-l-lg ${role === 'player' ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+              className={`px-3 py-1 rounded-l-lg ${role === 'player' ? 'bg-green-700 text-white' : 'bg-gray-200 text-gray-700'}`}
               onClick={() => handleRoleChange('player')}
               whileTap={{ scale: 0.95 }}
             >

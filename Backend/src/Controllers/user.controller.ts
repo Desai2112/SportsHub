@@ -1,4 +1,4 @@
-import { User } from "../Models/user";
+import { User, userRole } from "../Models/user";
 import { Request, Response, NextFunction } from "express";
 import validator from "validator";
 import {
@@ -9,6 +9,18 @@ import {
   SignUpResponseBodyType,
 } from "../Schemas/user.schema";
 import { GenericResponseType } from "../Schemas/genericResponse.schema";
+import { uploadOnCloudinary } from "../configuration/cloudinary";
+import passport from "passport";
+
+declare module 'express-serve-static-core' {
+  interface Request {
+    files?: {
+      profilepic?: {
+        path: string;
+      }[];
+    };
+  }
+}
 
 const addUser = async (
   req: Request<
@@ -19,7 +31,7 @@ const addUser = async (
   res: Response<SignUpResponseBodyType | GenericResponseType>,
 ) => {
   try {
-    const { name, email, password, mobileNo } = req.body;
+    const { name, email, password, mobileNo, role } = req.body;
 
     if (!name || !email || !password || !mobileNo) {
       return res.status(400).json({
@@ -35,7 +47,7 @@ const addUser = async (
       });
     }
 
-    if (!validator.isMobilePhone(mobileNo,['en-IN'])) {
+    if (!validator.isMobilePhone(mobileNo, ['en-IN'])) {
       return res.status(400).json({
         message: "Mobile number is not valid.",
         success: false,
@@ -49,6 +61,15 @@ const addUser = async (
       });
     }
 
+    const profilePicLocalpath = req.files?.profilepic?.[0]?.path || '';
+
+    let profileUrl = null;
+    try {
+      profileUrl = await uploadOnCloudinary(profilePicLocalpath);
+    } catch (error) {
+      console.error("Error uploading image to Cloudinary:", error);
+    }
+    console.log("Profile Local Path: ", profilePicLocalpath);
     const existingUserEmail = await User.findOne({ email });
     if (existingUserEmail) {
       return res.status(400).json({
@@ -56,12 +77,14 @@ const addUser = async (
         success: false,
       });
     }
-
+    const userRoleType = role || userRole.user;
     const newUser = new User({
       name: name,
       email: email,
       password: password,
-      mobileNo:mobileNo,
+      mobileNo: mobileNo,
+      role: userRoleType,
+      profilePic: profileUrl,
     });
 
     await newUser.save();
@@ -75,6 +98,7 @@ const addUser = async (
         mobileNo: newUser.mobileNo,
         createdAt: newUser.createdAt,
         updatedAt: newUser.updatedAt,
+        profilePic: newUser.profilePic,
       },
       success: true,
     });
@@ -92,7 +116,6 @@ const loginUser = async (
   next: NextFunction,
 ) => {
   try {
-    // const body = req.body;
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -126,8 +149,8 @@ const loginUser = async (
         id: user._id,
         name: user.name,
         email: user.email,
-        mobileNo:user.mobileNo,
-        role:user.role,
+        mobileNo: user.mobileNo,
+        role: user.role,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       },
@@ -184,68 +207,13 @@ const logOut = async (
   }
 };
 
-const addAdmin=async(req:Request,res:Response)=>{
-  try {
-    const { name, email, password, mobileNo } = req.body;
+const googleLogin = passport.authenticate('google', { scope: ['profile', 'email'] });
 
-    if (!name || !email || !password || !mobileNo) {
-      return res.status(400).json({
-        message: "All the fields are required.",
-        success: false,
-      });
-    }
+const googleCallback = (req: Request, res: Response) => {
+  passport.authenticate('google', {
+    successRedirect: '/me',
+    failureRedirect: '/',
+  })(req, res);
+};
 
-    if (!validator.isEmail(email)) {
-      return res.status(400).json({
-        message: "Email is not valid.",
-        success: false,
-      });
-    }
-
-    if (!validator.isLength(password, { min: 10 })) {
-      return res.status(400).json({
-        message: "Password must be at least 10 characters long.",
-        success: false,
-      });
-    }
-
-    const existingUserEmail = await User.findOne({ email });
-    if (existingUserEmail) {
-      return res.status(400).json({
-        message: "Email already exists.",
-        success: false,
-      });
-    }
-
-    const newUser = new User({
-      name: name,
-      email: email,
-      password: password,
-      role: "admin",
-      mobileNo:mobileNo,
-    });
-
-    await newUser.save();
-
-    res.status(201).json({
-      message: "User created successfully.",
-      userDetails: {
-        id: newUser._id,
-        name: newUser.name,
-        email: newUser.email,
-        role: newUser.role,
-        mobileNo: newUser.mobileNo,
-        createdAt: newUser.createdAt,
-        updatedAt: newUser.updatedAt,
-      },
-      success: true,
-    });
-  } catch (error) {
-    console.error(error);
-    return res
-      .status(500)
-      .json({ message: "Internal Server Error", success: false });
-  }
-}
-
-export { addUser, loginUser, getDetails, logOut,addAdmin };
+export { addUser, loginUser, getDetails, logOut, googleLogin, googleCallback };

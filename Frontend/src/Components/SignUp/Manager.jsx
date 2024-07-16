@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
-import { AiOutlineUser, AiFillEye, AiFillEyeInvisible, AiOutlineTeam } from 'react-icons/ai';
+import { AiFillEye, AiFillEyeInvisible, AiOutlineTeam } from 'react-icons/ai';
 
 const ManagerSignUp = ({ onSubmit }) => {
   const { register, handleSubmit, formState: { errors } } = useForm();

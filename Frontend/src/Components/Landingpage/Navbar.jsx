@@ -1,19 +1,31 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Dialog, DialogPanel, Disclosure, PopoverGroup } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Link } from 'react-scroll'
+import { useState } from "react";
+import {
+  Dialog,
+  DialogPanel,
+  Disclosure,
+  PopoverGroup,
+} from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Link } from "react-scroll";
 
 const Navbar = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="bg-[#e4e5ea]  w-full fixed top-0 left-0 right-0 z-50">
-      <nav aria-label="Global" className="flex items-center justify-between mt-0">
+      <nav
+        aria-label="Global"
+        className="flex items-center justify-between mt-0"
+      >
         <div className="flex flex-1">
           <a href="#" className="p-1.5 px-4">
-            <img alt="" src="https://res.cloudinary.com/dgvslio7u/image/upload/v1720845639/tofmmxz1oj8lvexsqaet.png" className="h-14 w-auto" />
+            <img
+              alt=""
+              src="https://res.cloudinary.com/dgvslio7u/image/upload/v1720845639/tofmmxz1oj8lvexsqaet.png"
+              className="h-14 w-auto"
+            />
           </a>
         </div>
         <div className="flex lg:hidden">
@@ -27,26 +39,55 @@ const Navbar = () => {
           </button>
         </div>
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
-          <Link to="home" smooth={true} duration={500} className="text-sm font-semibold leading-6 text-gray-800 hover:text-gray-600 bg-white rounded-md px-4 py-2 transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg cursor-pointer">
+          <Link
+            to="home"
+            smooth={true}
+            duration={500}
+            className="text-sm font-semibold leading-6 text-gray-800 hover:text-gray-600 bg-white rounded-md px-4 py-2 transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg cursor-pointer"
+          >
             Home
           </Link>
-          <Link to="premises" smooth={true} duration={500} className="text-sm font-semibold leading-6 text-gray-800 hover:text-gray-600 bg-white rounded-md px-4 py-2 transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg cursor-pointer">
+          <Link
+            to="premises"
+            smooth={true}
+            duration={500}
+            className="text-sm font-semibold leading-6 text-gray-800 hover:text-gray-600 bg-white rounded-md px-4 py-2 transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg cursor-pointer"
+          >
             Our Premises
           </Link>
-          <Link to="sports" smooth={true} duration={500} className="text-sm font-semibold leading-6 text-gray-800 hover:text-gray-600 bg-white rounded-md px-4 py-2 transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg cursor-pointer">
+          <Link
+            to="sports"
+            smooth={true}
+            duration={500}
+            className="text-sm font-semibold leading-6 text-gray-800 hover:text-gray-600 bg-white rounded-md px-4 py-2 transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg cursor-pointer"
+          >
             Sports
           </Link>
-          <Link to="about" smooth={true} duration={500} className="text-sm font-semibold leading-6 text-gray-800 hover:text-gray-600 bg-white rounded-md px-4 py-2 transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg cursor-pointer">
+          <Link
+            to="about"
+            smooth={true}
+            duration={500}
+            className="text-sm font-semibold leading-6 text-gray-800 hover:text-gray-600 bg-white rounded-md px-4 py-2 transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg cursor-pointer"
+          >
             About Us
           </Link>
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link to="/login" smooth={true} duration={500} className="text-sm font-semibold leading-6 text-gray-800 hover:text-gray-600 bg-white rounded-md px-4 py-2 mr-6 transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg cursor-pointer">
+          <a
+            href="/login"
+            // smooth={true}
+            // duration={500}
+            className="text-sm font-semibold leading-6 text-gray-800 hover:text-gray-600 bg-white rounded-md px-4 py-2 mr-6 transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg cursor-pointer"
+          >
             Log in <span aria-hidden="true">&rarr;</span>
-          </Link>
+          </a>
         </div>
       </nav>
-      <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
+      <Dialog
+        open={mobileMenuOpen}
+        onClose={setMobileMenuOpen}
+        className="lg:hidden"
+      >
         <div className="fixed inset-0 z-10" />
         <DialogPanel className="fixed inset-0 z-10 overflow-y-auto bg-green-100 px-6 py-6">
           <div className="flex items-center justify-between">
@@ -72,7 +113,12 @@ const Navbar = () => {
               <div className="space-y-2 py-6">
                 <Disclosure as="div" className="-mx-3">
                   <Disclosure.Button className="block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-                    <Link to="hero" smooth={true} duration={500} className="block w-full h-full">
+                    <Link
+                      to="hero"
+                      smooth={true}
+                      duration={500}
+                      className="block w-full h-full"
+                    >
                       Product
                     </Link>
                   </Disclosure.Button>
@@ -109,7 +155,7 @@ const Navbar = () => {
         </DialogPanel>
       </Dialog>
     </header>
-  )
-}
+  );
+};
 
 export default Navbar;

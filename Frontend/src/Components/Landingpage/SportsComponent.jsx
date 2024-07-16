@@ -9,7 +9,7 @@ const SportsComponent = () => {
     { id: 5, name: 'Basketball', imageUrl: 'https://res.cloudinary.com/dgvslio7u/image/upload/c_fill,h_600,w_800/v1720934341/nmjn9ipwvwp5ula35ehs.jpg' },
     { id: 6, name: 'Badminton', imageUrl: 'https://res.cloudinary.com/dgvslio7u/image/upload/c_fill,h_600,w_800/v1720934304/taumvl6ikk2xvzdzffd7.jpg' },
     { id: 7, name: 'Hockey', imageUrl: 'https://res.cloudinary.com/dgvslio7u/image/upload/v1720949234/hhjt6hvv2eqds51o4eut.jpg' },
-    { id: 8, name: 'Kabaddi', imageUrl: 'https://res.cloudinary.com/dgvslio7u/image/upload/c_fill,h_600,w_800/v1720935487/uywocqdrx2f3ey8tj0pi.jpg' },
+    { id: 8, name: 'Kabaddi', imageUrl: 'https://res.cloudinary.com/dgvslio7u/image/upload/v1721025300/ht4cckxcre31a9r3eysf.jpg' },
     { id: 9, name: 'Swimming', imageUrl: 'https://res.cloudinary.com/dgvslio7u/image/upload/c_fill,h_600,w_800/v1720935748/gupu2uuoekerocozqtvy.jpg' },
     { id: 10, name: 'Table Tennis', imageUrl: 'https://res.cloudinary.com/dgvslio7u/image/upload/c_fill,h_600,w_800/v1720935710/hbeckuuacaibr3bbzcgd.jpg' },
   ];
@@ -31,18 +31,18 @@ const SportsComponent = () => {
           setTimeout(() => {
             container.style.transition = 'transform 2s ease'; // Restart transition after resetting
           }, 0);
-        },0 ); // Adjusted delay to match transition duration
+        },225 ); // Adjusted delay to match transition duration
       }
     };
 
-    const interval = setInterval(moveContainer, 1000); // Slower interval
+    const interval = setInterval(moveContainer, 1950); // Slower interval
 
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="container w-full mx-auto px-0 pt-10"> {/* Removed px-4 for full width */}
-      <h1 className="text-2xl font-bold mt-8 mb-4 pb-5 text-center">Sports Component</h1>
+      <h1 className="text-3xl font-bold mt-8 mb-4 pb-5 text-center">Sports Component</h1>
       <div className="relative overflow-hidden width-screen bg-gray-100">
         <div
           ref={containerRef}
