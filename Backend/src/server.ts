@@ -7,7 +7,7 @@ import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
 import "./index.d.ts";
 import cors from "cors";
-import passport from "passport";
+
 
 dotenv.config();
 
@@ -16,19 +16,13 @@ const port = process.env.PORT || 3000;
 const secret = process.env.Session_Secret || "abcdfekhb4efc5f4";
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(cors({
-  origin: process.env.CORS_ORIGIN,
-  credentials: true,
-}));
+
 
 connectDB();
 app.listen(port, () => {
   console.log(`App is litsening on port ${port}`);
 });
 
-//session Configuration
 app.use(
   session({
     secret: secret,
@@ -46,6 +40,15 @@ app.use(
     }),
   }),
 );
+app.use(cors({
+  origin: process.env.CORS_ORIGIN,
+  credentials: true,
+}));
+
+
+
+//session Configuration
+
 
 //Routes import
 import userRoutes from "./Routes/userRoutes.route";

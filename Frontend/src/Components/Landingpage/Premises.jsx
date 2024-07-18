@@ -7,19 +7,19 @@ const Premises = () => {
       id: 1,
       image: "https://res.cloudinary.com/dgvslio7u/image/upload/v1719653121/Odoo%20Hackathone/dakh0hqbsis1uz6q663z.jpg",
       title: "Premises 1",
-      location: "Location 1",
+      location: "Indoor Sports Complex",
     },
     {
       id: 2,
       image: "https://res.cloudinary.com/dgvslio7u/image/upload/v1719653121/Odoo%20Hackathone/ilqu110hqvrc43lw0gbd.jpg",
       title: "Premises 2",
-      location: "Location 2",
+      location: "Magic Field Turf",
     },
     {
       id: 3,
       image: "https://res.cloudinary.com/dgvslio7u/image/upload/v1719653121/Odoo%20Hackathone/huhtuxdydt6uchkbyw2u.jpg",
       title: "Premises 3",
-      location: "Location 3",
+      location: "KickStart FC",
     },
   ];
 

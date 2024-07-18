@@ -1,4 +1,4 @@
-import mongoose, { Document, ObjectId, Schema } from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 import bcrypt from "bcrypt";
 
 export enum userRole {
@@ -6,7 +6,7 @@ export enum userRole {
   manager = "Manager",
 }
 
-export type IUser = {
+export interface IUser {
   googleId?: string;
   name: string;
   email: string;
@@ -16,16 +16,21 @@ export type IUser = {
   createdAt: Date;
   updatedAt: Date;
   mobileNo: string;
+  emailVerified:boolean;
   profilePic: string;
-};
+  passwordResetToken?: string;
+  passwordResetExpires?: Date;
+  isPasswordSet:boolean;
+}
 
-export type IUserModel = IUser &
-  Document & {
-    _id: Schema.Types.ObjectId;
-    comparePassword(password: string): Promise<boolean>;
-  };
+export interface IUserModel extends IUser, Document {
+  comparePassword(password: string): Promise<boolean>;
+  createPasswordResetToken(): Promise<string>;
+  passwordResetExpires: Date;
+  _id:Schema.Types.ObjectId;
+}
 
-export const userSchema: Schema = new Schema(
+const userSchema: Schema<IUserModel> = new Schema(
   {
     name: {
       type: String,
@@ -42,7 +47,7 @@ export const userSchema: Schema = new Schema(
     },
     role: {
       type: String,
-      enum: userRole,
+      enum: Object.values(userRole),
       default: userRole.user,
       required: true,
     },
@@ -64,24 +69,56 @@ export const userSchema: Schema = new Schema(
       unique: true,
       sparse: true,
     },
+    passwordResetToken: {
+      type: String,
+    },
+    passwordResetExpires: {
+      type: Date,
+    },
+    emailVerified:{
+      type:Boolean,
+      default:false,
+    },
+    isPasswordSet:{
+      type:Boolean,
+      default:true,
+    }
   },
   {
     versionKey: false,
     timestamps: true,
-  },
+  }
 );
 
 userSchema.pre<IUserModel>("save", async function (next) {
-  const user = this as IUserModel;
+  const user = this;
   if (!user.isModified("password")) return next();
 
-  user.password = await bcrypt.hash(user.password, 10);
-  next();
+  try {
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    user.password = hashedPassword;
+    next();
+  } catch (error) {
+    return (error);
+  }
 });
 
 userSchema.methods.comparePassword = async function (password: string) {
-  const user = this as IUserModel;
-  return bcrypt.compare(password, user.password);
+  try {
+    return await bcrypt.compare(password, this.password);
+  } catch (error) {
+    throw (error);
+  }
 };
+
+userSchema.methods.createPasswordResetToken =
+  async function (): Promise<string> {
+    const user = this as IUserModel;
+    const resetToken = bcrypt.genSaltSync(10);
+    const hashedToken = bcrypt.hashSync(resetToken, 10);
+    user.passwordResetToken = hashedToken;
+    user.passwordResetExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    return resetToken;
+  };
 
 export const User = mongoose.model<IUserModel>("User", userSchema);

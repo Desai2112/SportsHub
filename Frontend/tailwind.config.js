@@ -14,7 +14,7 @@ export default {
         '70/30': '70% 28%',
       },
       backgroundImage: {
-        'hero-bg': "url('https://res.cloudinary.com/dgvslio7u/image/upload/v1720879370/v0j0idif3jpq3ix2qwnp.png')",
+        'hero-bg': "url('https://res.cloudinary.com/dgvslio7u/image/upload/v1721104405/qq6btartjixtlwfbuf1o.jpg')",
       },
       keyframes: {
         slideIn: {

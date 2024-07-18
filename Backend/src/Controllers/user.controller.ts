@@ -10,9 +10,14 @@ import {
 } from "../Schemas/user.schema";
 import { GenericResponseType } from "../Schemas/genericResponse.schema";
 import { uploadOnCloudinary } from "../configuration/cloudinary";
-import passport from "passport";
+import { sendEmail } from "../configuration/mailconfigure";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import crypto from "crypto";
+import mongoose, { Schema } from "mongoose";
+import axios from "axios";
 
-declare module 'express-serve-static-core' {
+declare module "express-serve-static-core" {
   interface Request {
     files?: {
       profilepic?: {
@@ -47,7 +52,7 @@ const addUser = async (
       });
     }
 
-    if (!validator.isMobilePhone(mobileNo, ['en-IN'])) {
+    if (!validator.isMobilePhone(mobileNo, ["en-IN"])) {
       return res.status(400).json({
         message: "Mobile number is not valid.",
         success: false,
@@ -61,15 +66,6 @@ const addUser = async (
       });
     }
 
-    const profilePicLocalpath = req.files?.profilepic?.[0]?.path || '';
-
-    let profileUrl = null;
-    try {
-      profileUrl = await uploadOnCloudinary(profilePicLocalpath);
-    } catch (error) {
-      console.error("Error uploading image to Cloudinary:", error);
-    }
-    console.log("Profile Local Path: ", profilePicLocalpath);
     const existingUserEmail = await User.findOne({ email });
     if (existingUserEmail) {
       return res.status(400).json({
@@ -77,6 +73,15 @@ const addUser = async (
         success: false,
       });
     }
+    const profilePicLocalpath = req.files?.profilepic?.[0]?.path || "";
+
+    let profileUrl = null;
+    try {
+      profileUrl = await uploadOnCloudinary(profilePicLocalpath);
+    } catch (error) {
+      console.error("Error uploading image to Cloudinary:", error);
+    }
+    // console.log("Profile Local Path: ", profilePicLocalpath);
     const userRoleType = role || userRole.user;
     const newUser = new User({
       name: name,
@@ -166,7 +171,9 @@ const getDetails = async (
   res: Response<MeResponseBodyType | GenericResponseType>,
 ) => {
   try {
-    const user = await User.findById(req.session.user);
+    const user = await User.findById(req.session.user).select(
+      "-password -createdAt -updatedAt -deleted",
+    );
     if (!user) {
       return res.status(404).json({
         message: "User not found",
@@ -207,13 +214,164 @@ const logOut = async (
   }
 };
 
-const googleLogin = passport.authenticate('google', { scope: ['profile', 'email'] });
+const emailVerification = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.session.user).select(
+      "-password -createdAt -updatedAt -deleted",
+    );
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false,
+      });
+    }
+    console.log("Sending mail UserId:", user._id);
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!, {
+      expiresIn: "1h",
+    });
 
-const googleCallback = (req: Request, res: Response) => {
-  passport.authenticate('google', {
-    successRedirect: '/me',
-    failureRedirect: '/',
-  })(req, res);
+    // Create verification URL
+    const verificationUrl = `${req.protocol}://${req.get("host")}/user/verify-email?token=${token}`;
+
+    // Send verification email
+    const emailSubject = "Email Verification";
+    const emailMessage = `Please click on the following link to verify your email address: ${verificationUrl}`;
+    const emailHtmlMessage = `<p>Please click on the following link to verify your email address:</p><a href="${verificationUrl}">${verificationUrl}</a>`;
+
+    const emailResponse = await sendEmail(
+      user.email,
+      emailSubject,
+      emailHtmlMessage,
+    );
+
+    res.status(200).json({
+      message: "Verification email sent",
+      emailResponse,
+      success: true,
+    });
+  } catch (error) {
+    console.log("Error: ", error);
+    res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+    });
+  }
 };
 
-export { addUser, loginUser, getDetails, logOut, googleLogin, googleCallback };
+const verifyEmail = async (req: Request, res: Response) => {
+  try {
+    const token = req.query.token as string;
+    if (!token) {
+      return res.status(400).json({
+        message: "Token is required",
+        success: false,
+      });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+      userId: mongoose.Types.ObjectId;
+    };
+
+    console.log(decoded.userId);
+
+    const user = await User.findById(decoded.userId);
+    console.log(user);
+
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid or expired token",
+        success: false,
+      });
+    }
+
+    if (user.emailVerified) {
+      return res.status(400).json({
+        message: "Email is already verified",
+        success: false,
+      });
+    }
+
+    user.emailVerified = true; // Ensure you have this field in your user model
+    await user.save();
+
+    res.status(200).json({
+      message: "Email verified successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error during email verification:", error);
+    res.status(400).json({
+      message: "Invalid or expired token",
+      success: false,
+    });
+  }
+};
+
+const continueWithGoogle = async (req: Request, res: Response) => {
+  const { role } = req.params;
+  const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${process.env.GOOGLE_REDIRECT_URI}/${role}&response_type=code&scope=profile email`;
+  res.redirect(url);
+};
+
+const googleCallBack = async (req: Request, res: Response, next: NextFunction) => {
+  const { code } = req.query;
+  const { role } = req.params;
+
+  console.log("=========");
+  console.log(role);
+
+  try {
+    // Exchange authorization code for access token
+    const { data } = await axios.post("https://oauth2.googleapis.com/token", {
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET,
+      code,
+      redirect_uri: `${process.env.GOOGLE_REDIRECT_URI}/${role}`,
+      grant_type: "authorization_code",
+    });
+
+    const { access_token, id_token } = data;
+
+    // Use access_token or id_token to fetch user profile
+    const { data: profile } = await axios.get(
+      "https://www.googleapis.com/oauth2/v1/userinfo",
+      {
+        headers: { Authorization: `Bearer ${access_token}` },
+      },
+    );
+
+    // Check if user exists in the database
+    let user = await User.findOne({ email: profile.email.toLowerCase() });
+    if (!user) {
+      const randomString = crypto.randomBytes(20).toString("hex");
+      user = new User({
+        name: profile.name,
+        email: profile.email,
+        role: role,
+        profilePic: profile.picture,
+        password: await bcrypt.hash(randomString, 10),
+        isPasswordSet: false,
+      });
+      await user.save();
+    }
+    res.redirect(`${process.env.FRONTEND_URL}`);
+  } catch (error) {
+    next({
+      path: "/auth/google/callback",
+      status: 500,
+      message: "Authentication failed",
+      extraData: error,
+    });
+  }
+};
+
+export {
+  addUser,
+  loginUser,
+  getDetails,
+  logOut,
+  emailVerification,
+  verifyEmail,
+  continueWithGoogle,
+  googleCallBack,
+};

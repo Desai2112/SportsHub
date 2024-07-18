@@ -1,11 +1,13 @@
 import { Router } from "express";
 import {
   addUser,
+  continueWithGoogle,
+  emailVerification,
   getDetails,
+  googleCallBack,
   loginUser,
   logOut,
-  googleLogin,
-  googleCallback,
+  verifyEmail,
 } from "../Controllers/user.controller";
 import {
   loginBodyType,
@@ -42,9 +44,12 @@ router
   .get<any, MeResponseBodyType | GenericResponseType>(getDetails);
 
 router.route("/logout").delete<any, GenericResponseType>(logOut);
+router.route("/verify").post(emailVerification);
+router.route("/verify-email").get(verifyEmail);
 
-// Google OAuth Routes
-router.route("/google").get(googleLogin);
-router.route("/google/callback").get(googleCallback);
+router.route('/google/:role').get(continueWithGoogle);
+router.route('/google/callback/:role').get(googleCallBack);
+
+
 
 export default router;

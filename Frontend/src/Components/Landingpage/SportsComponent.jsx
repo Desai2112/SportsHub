@@ -31,7 +31,7 @@ const SportsComponent = () => {
           setTimeout(() => {
             container.style.transition = 'transform 2s ease'; // Restart transition after resetting
           }, 0);
-        },225 ); // Adjusted delay to match transition duration
+        },237 ); // Adjusted delay to match transition duration
       }
     };
 
@@ -41,9 +41,9 @@ const SportsComponent = () => {
   }, []);
 
   return (
-    <div className="container w-full mx-auto px-0 pt-10"> {/* Removed px-4 for full width */}
+    <div className="container w-full mx-auto px-0 pt-8"> {/* Removed px-4 for full width */}
       <h1 className="text-3xl font-bold mt-8 mb-4 pb-5 text-center">Sports Component</h1>
-      <div className="relative overflow-hidden width-screen bg-gray-100">
+      <div className="relative overflow-hidden width-screen bg-gray-100 pb-20">
         <div
           ref={containerRef}
           className="flex items-center w-screen space-x-4 overflow-hidden"
