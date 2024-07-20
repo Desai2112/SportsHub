@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import PlayerSignUp from '../../Components/SignUp/Player';
 import ManagerSignUp from '../../Components/SignUp/Manager';
+import axios from 'axios';
 
 const SignUp = () => {
   const [role, setRole] = useState('player');
@@ -12,9 +13,49 @@ const SignUp = () => {
     setRole(newRole);
   };
 
-  const handleSubmit = (data) => {
+  const handleSubmitPlayer = async (data) => {
+    // setSubmittedData(data);
+    // console.log(data);
+    // try {
+    //   const formData = new FormData();
+    //   formData.append('name', data.name);
+    //   formData.append('email', data.email);
+    //   formData.append('mobileNo', data.mobileNo);
+    //   formData.append('password', data.password);
+    //   formData.append('confirmPassword', data.confirmPassword);
+      
+    //   if (data.profilePic) {
+    //     formData.append('profilePic', data.profilePic);
+    //   }
+
+  //     const response = await axios.post('http://localhost:5000/auth/signup/player', formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data'
+  //       }
+  //     });
+
+  //     console.log(response.data);
+  //     // Handle success scenario as needed
+
+  //   } catch (error) {
+  //     console.error('Error submitting form:', error);
+  //     // Handle error scenario
+  //   }
+  };
+
+  const handleSubmitManager = async (data) => {
     setSubmittedData(data);
     console.log(data);
+    try {
+      const response = await axios.post('http://localhost:5000/auth/signup/manager', data);
+      
+      console.log(response.data);
+      // Handle success scenario as needed
+
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      // Handle error scenario
+    }
   };
 
   return (
@@ -26,13 +67,13 @@ const SignUp = () => {
         transition={{ duration: 0.5 }}
       >
         <div className="w-1/2 flex flex-col items-center justify-center p-4">
-          <img src={'https://res.cloudinary.com/dgvslio7u/image/upload/v1720845639/tofmmxz1oj8lvexsqaet.png'} alt="Company Logo" className="w-auto h-20 mb-2" />
+          <img src={'https://res.cloudinary.com/dgvslio7u/image/upload/v1720845639/tofmmxz1oj8lvexsqaet.png'} alt="SportsHub Logo" className="w-auto h-20 mb-2" />
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-4">Sign Up</h2>
         </div>
         <div className="w-1/2 flex flex-col items-center justify-center p-4">
           <div className="flex justify-center mb-4 relative">
             <motion.button
-              className={`px-3 py-1 rounded-l-lg ${role === 'player' ? 'bg-green-700 text-white' : 'bg-gray-200 text-gray-700'}`}
+              className={`px-3 py-1 rounded-l-lg ${role === 'player' ? 'bg-green-700 bg-opacity-50 text-white' : 'bg-gray-200 text-gray-700'}`}
               onClick={() => handleRoleChange('player')}
               whileTap={{ scale: 0.95 }}
             >
@@ -62,9 +103,9 @@ const SignUp = () => {
             className="w-full"
           >
             {role === 'player' ? (
-              <PlayerSignUp onSubmit={handleSubmit} />
+              <PlayerSignUp onSubmit={handleSubmitPlayer} />
             ) : (
-              <ManagerSignUp onSubmit={handleSubmit} />
+              <ManagerSignUp onSubmit={handleSubmitManager} />
             )}
           </motion.div>
           <div className="flex items-center my-4">

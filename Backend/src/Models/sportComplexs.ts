@@ -6,12 +6,16 @@ export type ISportComplex = {
   phone: string;
   email: string;
   city:string;
+  openingTime:Date;
+  closingTime:Date;
+  pricePerHour:Number;
   description: string;
   deleted: boolean;
   createdAt: Date;
   updatedAt: Date;
   manager:Schema.Types.ObjectId;
   sports: Schema.Types.ObjectId[];
+  images:string[];
 };
 
 export type ISportComplexModel = ISportComplex &
@@ -41,6 +45,18 @@ export const sportComplexSchema: Schema = new Schema(
       type: String,
       required: true,
     },
+    openingTime: {
+      type: Date,
+      required: true,
+    },
+    closingTime: {
+      type: Date,
+      required: true,
+    },
+    pricePerHour: {
+      type: Number,
+      required: true,
+    },
     description: {
       type: String,
       required: true,
@@ -60,6 +76,7 @@ export const sportComplexSchema: Schema = new Schema(
         type: Schema.Types.ObjectId,
         ref: "Sport",
       },
+
     ],
   },
   {

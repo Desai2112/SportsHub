@@ -21,35 +21,26 @@ import { upload } from "../Middlewares/multer";
 
 const router = Router();
 
-router
-  .route("/signup")
-  .post<any, SignUpResponseBodyType | GenericResponseType, SignUpBodyType>(
-    upload.fields([
-      {
-        name: "profilepic",
-        maxCount: 1,
-      },
-    ]),
-    addUser,
-  );
+// router.route("/signup").post(upload.single("profilePic"), addUser);
 
 router
   .route("/login")
-  .post<any, loginResponseBodyType | GenericResponseType, loginBodyType>(
-    loginUser,
-  );
+  .post<
+    any,
+    loginResponseBodyType | GenericResponseType,
+    loginBodyType
+  >(loginUser);
 
 router
   .route("/me")
   .get<any, MeResponseBodyType | GenericResponseType>(getDetails);
 
+router.post("/signup", upload.single("profilePic"), addUser);
 router.route("/logout").delete<any, GenericResponseType>(logOut);
 router.route("/verify").post(emailVerification);
 router.route("/verify-email").get(verifyEmail);
 
-router.route('/google/:role').get(continueWithGoogle);
-router.route('/google/callback/:role').get(googleCallBack);
-
-
+router.route("/google/:role").get(continueWithGoogle);
+router.route("/google/callback/:role").get(googleCallBack);
 
 export default router;

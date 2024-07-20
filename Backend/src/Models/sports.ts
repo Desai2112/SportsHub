@@ -3,8 +3,6 @@ import mongoose, { Document, Schema } from "mongoose";
 export type ISport = {
   name: string;
   description: string;
-  createdAt: Date;
-  updatedAt: Date;
 };
 
 export type ISportModel = ISport &
@@ -24,7 +22,7 @@ export const sportSchema: Schema = new Schema(
   },
   {
     versionKey: false,
-    timestamps: true,
+    timestamps: false,
   },
 );
 

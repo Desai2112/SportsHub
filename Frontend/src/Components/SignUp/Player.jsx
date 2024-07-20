@@ -1,25 +1,56 @@
 /* eslint-disable react/prop-types */
-import  { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import { AiOutlineUser, AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import axios from 'axios';
 
-const PlayerSignUp = ({ onSubmit }) => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+const PlayerSignUp = () => {
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const [showPassword, setShowPassword] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [file, setFile] = useState(null);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [profilePic, setProfilePic] = useState(null);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    setProfilePic(e.target.files[0]);
+  };
+
+  const handleFormSubmit = (data) => {
+    // Create FormData object
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('email', data.email);
+    formData.append('mobileNo', data.mobileNo);
+    formData.append('password', data.password);
+    formData.append('confirmPassword', data.confirmPassword);
+    
+    if (profilePic) {
+      formData.append('profilePic', profilePic);
+    }
+
+    const res =  axios.post('http://localhost:5000/auth/signup/user',formData)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((error) => {
+      console.error('Error submitting form:', error);
+    });
+    
+    // Call onSubmit with FormData
+
+    // Pass FormData to parent component
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
       <div className="text-center mb-4">
         <AiOutlineUser size={48} className="text-green-600" />
       </div>
@@ -52,7 +83,7 @@ const PlayerSignUp = ({ onSubmit }) => {
           className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-300 ${
             errors.phone ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-500'
           }`}
-          {...register('phone', { required: 'Phone number is required' })}
+          {...register('mobileNo', { required: 'Phone number is required' })}
         />
         {errors.phone && <p className="mt-2 text-sm text-red-600">{errors.phone.message}</p>}
       </div>
@@ -80,10 +111,48 @@ const PlayerSignUp = ({ onSubmit }) => {
       </div>
       <div className="relative">
         <input
-          type="file"
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 border-gray-300 focus:ring-green-500"
-          onChange={handleFileChange}
+          type={showConfirmPassword ? 'text' : 'password'}
+          placeholder="Confirm Password"
+          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-300 ${
+            errors.confirmPassword ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-500'
+          }`}
+          {...register('confirmPassword', {
+            required: 'Please confirm your password',
+            validate: (value) =>
+              value === watch('password') || 'Passwords do not match'
+          })}
         />
+        <button
+          type="button"
+          className="absolute inset-y-0 right-0 flex items-center px-4 focus:outline-none"
+          onClick={toggleConfirmPasswordVisibility}
+        >
+          {showConfirmPassword ? (
+            <AiFillEyeInvisible className="h-5 w-5 text-gray-500" />
+          ) : (
+            <AiFillEye className="h-5 w-5 text-gray-500" />
+          )}
+        </button>
+        {errors.confirmPassword && <p className="mt-2 text-sm text-red-600">{errors.confirmPassword.message}</p>}
+      </div>
+      <div className="relative">
+        <label
+          htmlFor="file-upload"
+          className="flex items-center px-4 py-2 border rounded-lg cursor-pointer bg-white text-gray-700 focus:outline-none focus:ring-2 border-gray-300 focus:ring-green-500"
+        >
+          <span>Upload Profile Picture</span>
+          <input
+            id="file-upload"
+            type="file"
+            className="sr-only"
+            onChange={handleFileChange}
+          />
+        </label>
+        {profilePic && (
+          <p className="mt-2 text-sm text-green-600">
+            {profilePic.name} selected
+          </p>
+        )}
       </div>
       <motion.button
         type="submit"

@@ -16,16 +16,17 @@ import bcrypt from "bcrypt";
 import crypto from "crypto";
 import mongoose, { Schema } from "mongoose";
 import axios from "axios";
+import { log } from "console";
 
-declare module "express-serve-static-core" {
-  interface Request {
-    files?: {
-      profilepic?: {
-        path: string;
-      }[];
-    };
-  }
-}
+// declare module "express-serve-static-core" {
+//   interface Request {
+//     file?: {
+//       profilePic?: {
+//         path: string;
+//       }[];
+//     };
+//   }
+// }
 
 const addUser = async (
   req: Request<
@@ -73,7 +74,8 @@ const addUser = async (
         success: false,
       });
     }
-    const profilePicLocalpath = req.files?.profilepic?.[0]?.path || "";
+    console.log(req.file);
+    const profilePicLocalpath = req.file?.path || "";
 
     let profileUrl = null;
     try {
@@ -130,7 +132,7 @@ const loginUser = async (
       });
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
       return res.status(400).json({
         success: false,
@@ -313,7 +315,11 @@ const continueWithGoogle = async (req: Request, res: Response) => {
   res.redirect(url);
 };
 
-const googleCallBack = async (req: Request, res: Response, next: NextFunction) => {
+const googleCallBack = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { code } = req.query;
   const { role } = req.params;
 

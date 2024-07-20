@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable react/no-unescaped-entities */
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -5,6 +6,8 @@ import { motion } from 'framer-motion';
 import { FcGoogle } from 'react-icons/fc';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+
 
 const Login = () => {
   const {
@@ -16,6 +19,21 @@ const Login = () => {
 
   const onSubmit = (data) => {
     console.log(data);
+    axios.post('http://localhost:5000/auth/login', data)
+      .then((response) => {
+        console.log(response.data.userDetails.role);
+        if(response.data.userDetails.role=="User")
+        {
+          window.location.href = '/user';
+        }
+        else if(response.data.userDetails.role=="Manager")
+        {
+          window.location.href = '/manager';
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const togglePasswordVisibility = () => {

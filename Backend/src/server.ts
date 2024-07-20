@@ -16,6 +16,8 @@ const port = process.env.PORT || 3000;
 const secret = process.env.Session_Secret || "abcdfekhb4efc5f4";
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.static("public"));
 
 
 connectDB();
@@ -52,14 +54,14 @@ app.use(cors({
 
 //Routes import
 import userRoutes from "./Routes/userRoutes.route";
-import complexRoute from "./Routes/userRoutes.route";
+// import complexRoute from "./Routes/userRoutes.route";
 import paymentroute from "./configuration/stripeConfigure"
-import bookingRoute from "./Routes/bookingroute.route"
-import managerRoutes from "./Routes/manager.route"
+// import bookingRoute from "./Routes/bookingroute.route"
+// import managerRoutes from "./Routes/manager.route"
 
 //Routes declaration
-app.use("/user", userRoutes);
-app.use("/complex",complexRoute);
-app.use("/book",bookingRoute);
+app.use("/auth", userRoutes);
+// app.use("/complex",complexRoute);
+// app.use("/book",bookingRoute);
 app.use("/payment",paymentroute);
-app.use("/manager",managerRoutes);
+// app.use("/manager",managerRoutes);

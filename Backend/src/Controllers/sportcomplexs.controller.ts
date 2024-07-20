@@ -3,39 +3,44 @@ import { SportComplex } from "../Models/sportComplexs";
 import { User } from "../Models/user";
 import { Sport } from "../Models/sports";
 
-const router = express.Router();
-
 const addComplex = async (req: Request, res: Response) => {
   const {
     name,
     address,
     phone,
-    email,
-    description,
-    manageremail,
-    sportsNames,
     city,
+    email,
+    openingTime,
+    closingTime,
+    pricePerHour,
+    description,
+    sports,
   } = req.body;
-  try {
-    if (
-      !name ||
-      !address ||
-      !phone ||
-      !email ||
-      !description ||
-      !manageremail ||
-      !sportsNames ||
-      !city
-    ) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
 
-    const manager = await User.findOne({ email: manageremail }).select("_id");
-    if (!manager) {
-      return res.status(404).json({ message: "Manager not found" });
+  const managerId = req.session.user;
+
+  if (
+    !name ||
+    !address ||
+    !phone ||
+    !city ||
+    !email ||
+    !openingTime ||
+    !closingTime ||
+    !pricePerHour ||
+    !description
+  ) {
+    res
+      .status(400)
+      .json({ message: "Please fill all the fields", success: false });
+  }
+    const user= await User.findById(managerId);
+    if(!user){
+      return res.status(400)
+      .json({ message: "Manager not found login again to continue.", success: false });
     }
     const sportIds = await Promise.all(
-      sportsNames.map(async (name: string) => {
+      sports.map(async (name: string) => {
         const sport = await Sport.findOne({ name });
         if(!sport){
           const newSport=new Sport({
@@ -48,37 +53,15 @@ const addComplex = async (req: Request, res: Response) => {
       }),
     );
 
-    const newSportComplex = new SportComplex({
-      name: name,
-      address: address,
-      phone: phone,
-      email: email,
-      description: description,
-      manager: manager._id,
-      sports: sportIds,
-      deleted: false,
-      city: city,
-    });
+    
 
-    await newSportComplex.save();
-
-    res
-      .status(201)
-      .json({
-        message: "Sport Complex created successfully",
-        newSportComplex,
-        success: true,
-      });
-  } catch (error) {
-    console.error("Error creating sport complex:", error);
-    res.status(500).json({ message: "Internal server error", success: false });
-  }
 };
 
 const getComplexDetails = async (req: Request, res: Response) => {
   const { complexId } = req.params;
   try {
     const complexDetails = await SportComplex.findById(complexId)
+      .select("-deleted -createdAt -updatedAt")
       .populate("manager", "name email phone")
       .populate("sports", "name");
     if (complexDetails) {
@@ -95,8 +78,8 @@ const getComplexDetails = async (req: Request, res: Response) => {
 const showAllComplex = async (req: Request, res: Response) => {
   try {
     const allComplex = await SportComplex.find({ deleted: false })
-      .populate("manager", "name email phone")
-      .populate("sports", "name -_id");
+      .select("-deleted -createdAt -updatedAt")
+      .populate("sports", "name _id");
     res.status(200).json({ allComplex, success: true });
   } catch (error) {
     console.error("Error getting all complex:", error);
@@ -131,4 +114,10 @@ const findComplexebyCity = async (req: Request, res: Response) => {
   }
 };
 
-export { addComplex, getComplexDetails, showAllComplex, findComplexbySports,findComplexebyCity };
+export {
+  addComplex,
+  getComplexDetails,
+  showAllComplex,
+  findComplexbySports,
+  findComplexebyCity,
+};

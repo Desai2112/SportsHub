@@ -2,15 +2,15 @@ import mongoose, { Document, Schema } from "mongoose";
 
 
 export enum bookingStatus{
-  booked="booked",
-  completed="completed",
-  cancelled="cancelled"
+  booked="Booked",
+  completed="Completed",
+  cancelled="Cancelled"
 }
 
 export enum approvalStatus{
-  pending="pending",
-  approved="approved",
-  rejected="rejected"
+  pending="Pending",
+  approved="Approved",
+  rejected="Rejected"
 }
 export type IBooking = {
   user: Schema.Types.ObjectId;
