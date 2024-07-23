@@ -36,9 +36,10 @@ const PlayerSignUp = () => {
       formData.append('profilePic', profilePic);
     }
 
-    const res =  axios.post('http://localhost:5000/auth/signup/user',formData)
+    axios.post('http://localhost:5000/auth/signup/user',formData)
     .then((res) => {
       console.log(res.data);
+      window.location.href = '/user'
     })
     .catch((error) => {
       console.error('Error submitting form:', error);

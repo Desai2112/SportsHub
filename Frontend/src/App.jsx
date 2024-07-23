@@ -7,7 +7,7 @@ import SignUp from './Pages/Authentication/SignUp';
 import LandingPage from './Pages/Landing_Page/LandingPage';
 import HomePage from './Pages/User/HomePage';
 import MHomePage from './Pages/Manager/MHomePage';
-import ComplexCard from './Components/User/ComplexCard';
+import ShowComplex from './Pages/User/ShowComplex';
 
 const App = () => {
   return (
@@ -18,9 +18,7 @@ const App = () => {
         <Route path="/register" element={<SignUp />} />
         <Route path="/user" element={<HomePage />} />
         <Route path="/manager" element={<MHomePage />} />
-        <Route path="/card" element={<ComplexCard />} />
-
-
+        <Route path="/Complex" element={<ShowComplex />} />
       </Routes>
     </Router>
   );

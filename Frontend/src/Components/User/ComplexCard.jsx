@@ -1,22 +1,11 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { FaMapMarker } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-const ComplexCard = () => {
+const ComplexCard = ({ complex }) => {
   const [showFullDescription, setShowFullDescription] = useState(false);
-
-  const complex = {
-    id: 1,
-    image:
-      "https://res.cloudinary.com/dgvslio7u/image/upload/v1720845639/tofmmxz1oj8lvexsqaet.png", // Placeholder image URL resized to 160x160
-    type: "Indoor Sports Complex",
-    title: "Elite Sports Center",
-    description:
-      "Elite Sports Center is a state-of-the-art facility offering a wide range of sports amenities including football fields, tennis courts, swimming pools, and a modern gym. It is designed to cater to both professional athletes and sports enthusiasts, providing top-notch training and recreational facilities.",
-    rent: "₹500 - ₹1,500",
-    location: "Nadiad, Gujarat",
-  };
 
   let description = complex.description;
 
@@ -25,11 +14,11 @@ const ComplexCard = () => {
   }
 
   return (
-    <div className="bg-white text-black rounded-lg shadow-lg shadow-blue-300 relative w-80">
+    <div className="bg-white text-black rounded-lg shadow-lg shadow-blue-300 relative w-80 m-4">
       <img
         src={complex.image}
         alt={`${complex.title} image`}
-        className="w-full h-48 object-contain rounded-t-lg mx-auto mt-4" // Adjusted height and object-fit
+        className="w-full h-48 object-contain rounded-t-lg mx-auto mt-4"
       />
       <div className="p-4">
         <div className="mb-3">
@@ -37,13 +26,13 @@ const ComplexCard = () => {
           <h3 className="text-xl font-bold">{complex.title}</h3>
         </div>
 
-        {/* <div className="mb-3">{description}</div>
+        <div className="mb-3">{description}</div>
         <button
           className="text-blue-500 mb-3 hover:text-blue-600"
           onClick={() => setShowFullDescription((prevState) => !prevState)}
         >
           {showFullDescription ? "Less" : "More"}
-        </button> */}
+        </button>
         <h3 className="text-blue-500 mb-2">{complex.rent} / Hour</h3>
 
         <div className="border border-gray-200 mb-3"></div>

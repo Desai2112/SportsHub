@@ -38,7 +38,8 @@ const addUser = async (
 ) => {
   try {
     const { name, email, password, mobileNo, role } = req.body;
-
+    //  console.log(req.body);
+     
     if (!name || !email || !password || !mobileNo) {
       return res.status(400).json({
         message: "All the fields are required.",
@@ -371,6 +372,22 @@ const googleCallBack = async (
   }
 };
 
+const tempUpload=async(req:Request,res:Response)=>{
+  console.log(req.file);
+  const profilePicLocalpath = req.file?.path || "";
+  console.log(profilePicLocalpath);
+  let profileUrl = null;
+    try {
+      profileUrl = await uploadOnCloudinary(profilePicLocalpath);
+    } catch (error) {
+      console.error("Error uploading image to Cloudinary:", error);
+    }
+    console.log("Profile Url: ",profileUrl);
+    res.send("Image uploading ");
+    console.log("Done");
+}
+const rememberMe = async (req: Request, res: Response) => {};
+
 export {
   addUser,
   loginUser,
@@ -380,4 +397,5 @@ export {
   verifyEmail,
   continueWithGoogle,
   googleCallBack,
+  tempUpload
 };

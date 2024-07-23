@@ -7,6 +7,7 @@ import {
   googleCallBack,
   loginUser,
   logOut,
+  tempUpload,
   verifyEmail,
 } from "../Controllers/user.controller";
 import {
@@ -35,12 +36,14 @@ router
   .route("/me")
   .get<any, MeResponseBodyType | GenericResponseType>(getDetails);
 
-router.post("/signup", upload.single("profilePic"), addUser);
+// router.post("/signup", upload.single("profilePic"), tempUpload);
 router.route("/logout").delete<any, GenericResponseType>(logOut);
 router.route("/verify").post(emailVerification);
 router.route("/verify-email").get(verifyEmail);
 
 router.route("/google/:role").get(continueWithGoogle);
 router.route("/google/callback/:role").get(googleCallBack);
+
+router.route("/signup").post(upload.single("profilePic"),addUser);
 
 export default router;
