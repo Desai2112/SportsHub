@@ -25,8 +25,18 @@ export default {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(calc(-100% - var(--gap)))" },
+        },
+        "marquee-vertical": {
+          from: { transform: "translateY(0)" },
+          to: { transform: "translateY(calc(-100% - var(--gap)))" },
+        },
       },
       animation: {
+        marquee: "marquee var(--duration) linear infinite",
+        "marquee-vertical": "marquee-vertical var(--duration) linear infinite",
         'slide-in': 'slideIn 1s ease-out forwards',
         'fade-in': 'fadeIn 2s ease-in forwards',
       },

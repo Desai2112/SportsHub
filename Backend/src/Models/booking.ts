@@ -12,6 +12,11 @@ export enum approvalStatus{
   approved="Approved",
   rejected="Rejected"
 }
+
+export enum bookingType{
+  maintenance="Maintanance",
+  regular="Regular"
+}
 export type IBooking = {
   user: Schema.Types.ObjectId;
   sportComplex: Schema.Types.ObjectId;
@@ -20,6 +25,7 @@ export type IBooking = {
   endTime: Date;
   status: bookingStatus; 
   approvalStatus: approvalStatus;
+  type:bookingType;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -66,6 +72,12 @@ export const bookingSchema: Schema = new Schema(
       default: approvalStatus.pending,
       required: true,
     },
+    type:{
+      type:String,
+      enum:bookingType,
+      default:bookingType.regular,
+      required:true,
+    }
   },
   {
     versionKey: false,

@@ -3,7 +3,6 @@ import { Sport } from "../Models/sports";
 import { SportComplex } from "../Models/sportComplexs";
 import { Booking } from "../Models/booking";
 import { User } from "../Models/user";
-import { GroundMaintenanceLog } from "../Models/groundMaintanance";
 import { sendWp } from "../configuration/whatsappSender";
 import { sendEmail } from "../configuration/mailconfigure";
 
@@ -148,26 +147,9 @@ const seeAvailability = async (req: Request, res: Response) => {
       ],
     }); 
 
-    const maintenances = await GroundMaintenanceLog.find({
-      sportComplex: sportComplexId,
-      $or: [
-        {
-          startTime: { $lte: new Date(startTime) },
-          endTime: { $gte: new Date(startTime) },
-        },
-        {
-          startTime: { $lte: new Date(endTime) },
-          endTime: { $gte: new Date(endTime) },
-        },
-        {
-          startTime: { $gte: new Date(startTime) },
-          endTime: { $lte: new Date(endTime) },
-        },
-      ],
-    });
 
-    if (bookings.length > 0 || maintenances.length > 0) {
-      res.json({ available: false, bookings, maintenances });
+    if (bookings.length > 0) {
+      res.json({ available: false, bookings });
     } else {
       res.json({ available: true });
     }

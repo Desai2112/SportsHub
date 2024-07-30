@@ -16,17 +16,6 @@ import bcrypt from "bcrypt";
 import crypto from "crypto";
 import mongoose, { Schema } from "mongoose";
 import axios from "axios";
-import { log } from "console";
-
-// declare module "express-serve-static-core" {
-//   interface Request {
-//     file?: {
-//       profilePic?: {
-//         path: string;
-//       }[];
-//     };
-//   }
-// }
 
 const addUser = async (
   req: Request<

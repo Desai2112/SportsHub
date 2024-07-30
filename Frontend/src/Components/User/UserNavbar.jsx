@@ -1,162 +1,145 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+"use client";
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+import { useState } from "react";
+import { Dialog, DialogPanel, Disclosure } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
+import { Link } from "react-router-dom";
 
-function UserNavbar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+const UserNavbar = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
+    <header className="bg-blue-900 text-white w-full fixed top-0 left-0 right-0 z-50 shadow-lg">
+      <nav aria-label="Global" className="flex items-center justify-between p-2 lg:px-6">
+        <div className="flex flex-1 items-center">
+          <a href="#" className="p-1.5">
+            <img
+              alt="Company Logo"
+              src="https://res.cloudinary.com/dgvslio7u/image/upload/v1720845639/tofmmxz1oj8lvexsqaet.png"
+              className="h-12 w-auto"
+            />
+          </a>
+          <div className="hidden lg:flex lg:gap-x-12 ml-6">
+            <Link to="/user/home" className="text-base font-semibold leading-6 hover:text-blue-300 transition duration-300 ease-in-out">
+              Home
+            </Link>
+            <Link to="/user/complex" className="text-base font-semibold leading-6 hover:text-blue-300 transition duration-300 ease-in-out">
+              All Complexes
+            </Link>
+            <Link to="/user/my-bookings" className="text-base font-semibold leading-6 hover:text-blue-300 transition duration-300 ease-in-out">
+              My Bookings
+            </Link>
+          </div>
+        </div>
+        <div className="flex lg:hidden">
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(true)}
+            className="inline-flex items-center justify-center p-2.5 text-white"
           >
-            LOGO
-          </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
+            <span className="sr-only">Open main menu</span>
+            <Bars3Icon aria-hidden="true" className="h-6 w-6" />
+          </button>
+        </div>
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center relative">
+          <button
+            onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+            className="flex items-center space-x-2 text-sm font-semibold leading-6 hover:text-blue-300 transition duration-300 ease-in-out focus:outline-none"
           >
-            LOGO
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+            <img
+              alt="Profile"
+              src="https://randomuser.me/api/portraits/men/32.jpg"
+              className="h-8 w-8 rounded-full"
+            />
+            <ChevronDownIcon className="h-5 w-5" />
+          </button>
+          {profileMenuOpen && (
+            <div className="absolute right-0 top-12 mt-2 w-64 bg-white text-blue-900 rounded-lg shadow-lg z-50">
+              <Link to="/user/profile" className="block px-6 py-3 text-lg hover:bg-blue-100 flex items-center">
+                <svg className="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l6.16-3.422A12.084 12.084 0 0021 9.883M12 14l-6.16-3.422A12.084 12.084 0 013 9.883M12 14v10m0-10l6.16-3.422M12 14l-6.16-3.422M5.86 16.458L3 9.883M18.14 16.458L21 9.883"></path>
+                </svg>
+                Profile
+              </Link>
+              <Link to="/user/logout" className="block px-6 py-3 text-lg hover:bg-blue-100 flex items-center">
+                <svg className="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+                Log out
+              </Link>
+            </div>
+          )}
+        </div>
+      </nav>
+      <Dialog open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} className="lg:hidden">
+        <div className="fixed inset-0 z-10 bg-blue-900 bg-opacity-80" />
+        <DialogPanel className="fixed inset-0 z-20 bg-blue-800 px-6 py-6">
+          <div className="flex items-center justify-between">
+            <a href="#" className="p-1.5">
+              <img
+                alt="Company Logo"
+                src="https://res.cloudinary.com/dgvslio7u/image/upload/v1720845639/tofmmxz1oj8lvexsqaet.png"
+                className="h-10 w-auto"
+              />
+            </a>
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(false)}
+              className="rounded-md p-2.5 text-white"
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+              <span className="sr-only">Close menu</span>
+              <XMarkIcon aria-hidden="true" className="h-6 w-6" />
+            </button>
+          </div>
+          <div className="mt-6 flow-root">
+            <div className="-my-6 divide-y divide-gray-500/10">
+              <div className="space-y-2 py-6">
+                <Disclosure as="div" className="-mx-3">
+                  <Disclosure.Button className="block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-blue-700">
+                    <Link to="/user/home" className="block w-full h-full">
+                      Home
+                    </Link>
+                  </Disclosure.Button>
+                </Disclosure>
+                <Disclosure as="div" className="-mx-3">
+                  <Disclosure.Button className="block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-blue-700">
+                    <Link to="/user/complex" className="block w-full h-full">
+                      All Complexes
+                    </Link>
+                  </Disclosure.Button>
+                </Disclosure>
+                <Disclosure as="div" className="-mx-3">
+                  <Disclosure.Button className="block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-blue-700">
+                    <Link to="/user/my-bookings" className="block w-full h-full">
+                      My Bookings
+                    </Link>
+                  </Disclosure.Button>
+                </Disclosure>
+              </div>
+              <div className="py-6">
+                <Disclosure as="div" className="-mx-3">
+                  <Disclosure.Button className="block rounded-lg px-3 py-2.5 my-4 text-base font-semibold leading-7 text-white hover:bg-blue-700">
+                    <Link to="/user/profile" className="block w-full h-full">
+                      Profile
+                    </Link>
+                  </Disclosure.Button>
+                </Disclosure>
+                <Disclosure as="div" className="-mx-3">
+                  <Disclosure.Button className="block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-white hover:bg-blue-700">
+                    <Link to="/user/logout" className="block w-full h-full">
+                      Log out
+                    </Link>
+                  </Disclosure.Button>
+                </Disclosure>
+              </div>
+            </div>
+          </div>
+        </DialogPanel>
+      </Dialog>
+    </header>
   );
-}
+};
+
 export default UserNavbar;

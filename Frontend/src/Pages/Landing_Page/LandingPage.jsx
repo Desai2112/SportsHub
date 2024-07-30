@@ -31,6 +31,7 @@ const LandingPage = () => {
           <SportsComponent />
         </div>
       </Element>
+      
       <Element name="about">
         <ContactForm />
       </Element>

@@ -51,10 +51,13 @@ const ComplexList = () => {
   ];
 
   return (
-    <div className="flex flex-wrap justify-center">
-      {complexes.map((complex) => (
-        <ComplexCard key={complex.id} complex={complex} />
-      ))}
+    <div className="py-8 ">
+      <div className="text-center pt-20 text-2xl font-bold ">All Complexes</div>
+      <div className="flex pt-8 flex-wrap justify-center">
+        {complexes.map((complex) => (
+          <ComplexCard key={complex.id} complex={complex} />
+        ))}
+      </div>
     </div>
   );
 };
