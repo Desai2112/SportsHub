@@ -58,7 +58,7 @@ const userSchema: Schema<IUserModel> = new Schema(
     },
     mobileNo: {
       type: String,
-      required: true,
+      // required: true,
     },
     profilePic: {
       type: String,

@@ -28,7 +28,7 @@ const addUser = async (
   try {
     const { name, email, password, mobileNo, role } = req.body;
     //  console.log(req.body);
-     
+
     if (!name || !email || !password || !mobileNo) {
       return res.status(400).json({
         message: "All the fields are required.",
@@ -312,9 +312,13 @@ const googleCallBack = async (
 ) => {
   const { code } = req.query;
   const { role } = req.params;
-
-  console.log("=========");
   console.log(role);
+  let role1;
+  if (role == "user") {
+    role1 = userRole.user;
+  } else {
+    role1 = userRole.manager;
+  }
 
   try {
     // Exchange authorization code for access token
@@ -327,6 +331,7 @@ const googleCallBack = async (
     });
 
     const { access_token, id_token } = data;
+    // console.log(data);
 
     // Use access_token or id_token to fetch user profile
     const { data: profile } = await axios.get(
@@ -343,38 +348,43 @@ const googleCallBack = async (
       user = new User({
         name: profile.name,
         email: profile.email,
-        role: role,
+        role: role1,
         profilePic: profile.picture,
         password: await bcrypt.hash(randomString, 10),
         isPasswordSet: false,
       });
       await user.save();
     }
-    res.redirect(`${process.env.FRONTEND_URL}`);
+    let newuser = await User.findOne({ email: profile.email.toLowerCase() });
+    console.log(newuser);
+    // await user.find({})
+    console.log("Login Done");
+    res.redirect(`${process.env.FRONTEND_URL}/${role}`);
   } catch (error) {
+    console.error("Error in googleCallBack:", error); // Enhanced logging
     next({
       path: "/auth/google/callback",
       status: 500,
       message: "Authentication failed",
-      extraData: error,
+      extraData: error.response ? error.response.data : error.message, // Log detailed error info
     });
   }
 };
 
-const tempUpload=async(req:Request,res:Response)=>{
+const tempUpload = async (req: Request, res: Response) => {
   console.log(req.file);
   const profilePicLocalpath = req.file?.path || "";
   console.log(profilePicLocalpath);
   let profileUrl = null;
-    try {
-      profileUrl = await uploadOnCloudinary(profilePicLocalpath);
-    } catch (error) {
-      console.error("Error uploading image to Cloudinary:", error);
-    }
-    console.log("Profile Url: ",profileUrl);
-    res.send("Image uploading ");
-    console.log("Done");
-}
+  try {
+    profileUrl = await uploadOnCloudinary(profilePicLocalpath);
+  } catch (error) {
+    console.error("Error uploading image to Cloudinary:", error);
+  }
+  console.log("Profile Url: ", profileUrl);
+  res.send("Image uploading ");
+  console.log("Done");
+};
 const rememberMe = async (req: Request, res: Response) => {};
 
 export {
@@ -386,5 +396,5 @@ export {
   verifyEmail,
   continueWithGoogle,
   googleCallBack,
-  tempUpload
+  tempUpload,
 };

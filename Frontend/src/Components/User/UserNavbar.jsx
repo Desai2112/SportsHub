@@ -98,7 +98,7 @@ const UserNavbar = () => {
               <div className="space-y-2 py-6">
                 <Disclosure as="div" className="-mx-3">
                   <Disclosure.Button className="block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-blue-700">
-                    <Link to="/user/home" className="block w-full h-full">
+                    <Link to="/user" className="block w-full h-full">
                       Home
                     </Link>
                   </Disclosure.Button>
