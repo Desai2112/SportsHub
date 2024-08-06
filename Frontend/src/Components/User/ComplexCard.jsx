@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { FaMapMarker } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -14,11 +13,11 @@ const ComplexCard = ({ complex }) => {
   }
 
   return (
-    <div className="bg-white text-black rounded-lg shadow-lg shadow-blue-300 relative w-80 m-4">
+    <div className="bg-white text-black rounded-lg shadow-lg shadow-blue-300 relative w-80 m-4 transform transition duration-500 hover:scale-105">
       <img
         src={complex.image}
         alt={`${complex.title} image`}
-        className="w-full h-48 object-contain rounded-t-lg mx-auto mt-4"
+        className="w-full h-48 object-contain rounded-t-lg mx-auto mt-4 transition duration-500 hover:opacity-80"
       />
       <div className="p-4">
         <div className="mb-3">
@@ -44,6 +43,7 @@ const ComplexCard = ({ complex }) => {
           </div>
           <Link
             to={`/complexes/${complex.id}`}
+            state={{ complex }}
             className="h-[36px] bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-center text-sm"
           >
             Enquire Now

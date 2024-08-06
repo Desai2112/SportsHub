@@ -1,5 +1,3 @@
-// App.jsx
-
 // import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './Pages/Authentication/login';
@@ -11,7 +9,7 @@ import ShowComplex from './Pages/User/ShowComplex';
 import ProfilePage from './Components/User/ProfilePage';
 import IncomingRequest from './Components/Manager/IncomingRequest';
 import NotFound from './Components/NotFound';
-
+import EnquiryPage from './Components/User/EnquiryPage';
 
 const App = () => {
   return (
@@ -25,6 +23,7 @@ const App = () => {
         <Route path="/user/Complex" element={<ShowComplex />} />
         <Route path="/user/profile" element={<ProfilePage />} />
         <Route path="/manager/request" element={<IncomingRequest />} />
+        <Route path="/complexes/:id" element={<EnquiryPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

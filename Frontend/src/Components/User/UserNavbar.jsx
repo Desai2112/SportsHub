@@ -13,7 +13,7 @@ const UserNavbar = () => {
     <header className="bg-blue-900 text-white w-full fixed top-0 left-0 right-0 z-50 shadow-lg">
       <nav aria-label="Global" className="flex items-center justify-between p-2 lg:px-6">
         <div className="flex flex-1 items-center">
-          <a href="#" className="p-1.5">
+          <a className="p-1.5">
             <img
               alt="Company Logo"
               src="https://res.cloudinary.com/dgvslio7u/image/upload/v1720845639/tofmmxz1oj8lvexsqaet.png"
@@ -21,7 +21,7 @@ const UserNavbar = () => {
             />
           </a>
           <div className="hidden lg:flex lg:gap-x-12 ml-6">
-            <Link to="/user/home" className="text-base font-semibold leading-6 hover:text-blue-300 transition duration-300 ease-in-out">
+            <Link to="/user" className="text-base font-semibold leading-6 hover:text-blue-300 transition duration-300 ease-in-out">
               Home
             </Link>
             <Link to="/user/complex" className="text-base font-semibold leading-6 hover:text-blue-300 transition duration-300 ease-in-out">

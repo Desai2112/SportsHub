@@ -1,9 +1,13 @@
 // import React from 'react'
 
+import UserNavbar from "../../Components/User/UserNavbar"
+
 const HomePage = () => {
   return (
-    <div>HomePage</div>
+    <>
+      <UserNavbar />
+    </>
   )
 }
 
-export default HomePage
+export default HomePage;
