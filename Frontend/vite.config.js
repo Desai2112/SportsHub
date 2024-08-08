@@ -7,6 +7,11 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['@mui/material'], // Exclude the problematic dependency
   },
+  resolve: {
+    alias: {
+      '@': '/src',
+    },
+  },
 })
 
 

@@ -24,6 +24,7 @@ const App = () => {
         <Route path="/user/profile" element={<ProfilePage />} />
         <Route path="/manager/request" element={<IncomingRequest />} />
         <Route path="/complexes/:id" element={<EnquiryPage />} />
+        <Route path="/manager/home" element={<EnquiryPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
