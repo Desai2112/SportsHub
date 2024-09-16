@@ -1,5 +1,6 @@
 // components/Manager/UpcomingBookings.js
-// import React from 'react';
+
+import { useNavigate } from "react-router-dom";
 
 const bookings = [
   { id: 1, name: "Basketball Court", date: "June 15, 2024", time: "6:00 PM" },
@@ -8,20 +9,30 @@ const bookings = [
   { id: 4, name: "Fitness Center", date: "June 18, 2024", time: "7:00 PM" },
 ];
 
-const UpcomingBookings = () => (
-  <div className="rounded-lg border border-gray-300 bg-white text-gray-800 shadow-sm">
+const UpcomingBookings =()=>{
+  const navigate=useNavigate();
+
+const handleViewClick =()=>{
+  navigate('/manager/bookings');
+}
+  
+  return (
+  <div className="rounded-lg border border-gray-700 bg-gray-800 text-gray-100 shadow-sm">
     <div className="flex flex-col space-y-1.5 p-6">
       <h3 className="text-2xl font-semibold leading-none tracking-tight">Upcoming Bookings</h3>
     </div>
     <div className="p-6">
       <div className="space-y-4">
         {bookings.map((booking) => (
-          <div key={booking.id} className="flex items-center justify-between border border-gray-200 rounded-md p-4">
+          <div
+            key={booking.id}
+            className="flex items-center justify-between border border-gray-600 rounded-md p-4 bg-gray-900"
+          >
             <div>
               <div className="font-medium">{booking.name}</div>
-              <div className="text-xs text-gray-600">{booking.date} - {booking.time}</div>
+              <div className="text-xs text-gray-400">{booking.date} - {booking.time}</div>
             </div>
-            <button className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-gray-100 hover:bg-gray-200 text-gray-700 h-9 rounded-md px-3">
+            <button onClick={handleViewClick} className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-600 bg-gray-700 hover:bg-gray-600 text-gray-100 h-9 rounded-md px-3">
               View
             </button>
           </div>
@@ -30,5 +41,6 @@ const UpcomingBookings = () => (
     </div>
   </div>
 );
+}
 
 export default UpcomingBookings;

@@ -19,7 +19,9 @@ const Login = () => {
 
   const onSubmit = (data) => {
     console.log(data);
-    axios.post('http://localhost:5000/auth/login', data)
+    axios.post('http://localhost:5000/auth/login', data,{
+      withCredentials:true,
+    })
       .then((response) => {
         console.log(response.data.userDetails.role);
         if(response.data.userDetails.role=="User")

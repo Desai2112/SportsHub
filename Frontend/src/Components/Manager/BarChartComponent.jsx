@@ -1,5 +1,4 @@
 // components/Manager/BarChartComponent.js
-// import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Title } from 'chart.js';
 
@@ -25,19 +24,49 @@ const BarChartComponent = () => {
     plugins: {
       title: {
         display: true,
-        text: 'Monthly Revenue Overview', // Title for the Bar Chart
+        text: 'Monthly Revenue Overview',
         padding: {
           top: 10,
           bottom: 30
-        }
+        },
+        color: '#fff', // Title color for dark mode
       },
       legend: {
         position: 'top',
+        labels: {
+          color: '#fff', // Legend color for dark mode
+        },
       },
       tooltip: {
         callbacks: {
           label: (tooltipItem) => `Value: ${tooltipItem.raw}`,
         },
+        backgroundColor: '#333', // Tooltip background color for dark mode
+        titleColor: '#fff', // Tooltip title color for dark mode
+        bodyColor: '#fff', // Tooltip body color for dark mode
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: '#fff', // X-axis labels color for dark mode
+        },
+        grid: {
+          color: '#444', // X-axis grid color for dark mode
+        },
+      },
+      y: {
+        ticks: {
+          color: '#fff', // Y-axis labels color for dark mode
+        },
+        grid: {
+          color: '#444', // Y-axis grid color for dark mode
+        },
+      },
+    },
+    elements: {
+      bar: {
+        borderColor: 'rgba(75, 192, 192, 1)', // Bar border color
       },
     },
   };

@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      blur: {
+        xs: '2px',
+      },
       fontFamily:
       {
         sans: ['Roboto', 'sans-serif'],

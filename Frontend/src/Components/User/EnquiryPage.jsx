@@ -1,4 +1,3 @@
-// import React from 'react';
 import { useLocation } from 'react-router-dom';
 
 const EnquiryPage = () => {
@@ -10,68 +9,87 @@ const EnquiryPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white text-black rounded-lg shadow-lg p-8 w-full max-w-6xl animate-fadeIn">
-        <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">{`Enquiry for ${complex.title}`}</h1>
-        <div className="flex flex-col lg:flex-row">
-          <img
-            src={complex.image}
-            alt={`${complex.title} image`}
-            className="w-full lg:w-1/2 h-80 object-cover rounded-lg shadow-md mb-4 lg:mb-0 lg:mr-4 transform hover:scale-105 transition duration-500 ease-in-out"
-          />
-          <div className="lg:w-1/2 lg:pl-4">
-            <div className="flex flex-col lg:flex-row justify-between mb-4">
-              <p className="text-gray-700 mb-2"><strong>Type:</strong> {complex.type}</p>
-              <p className="text-gray-700 mb-2"><strong>Rent:</strong> {complex.rent} / Hour</p>
-            </div>
-            <p className="text-gray-700 mb-2"><strong>Description:</strong> {complex.description}</p>
-            <p className="text-gray-700 mb-2"><strong>Location:</strong> {complex.location}</p>
+    <div className="min-h-screen flex bg-gradient-to-br from-gray-50 to-gray-200 py-10 px-4">
+      <div className="flex flex-col md:flex-row bg-white shadow-xl rounded-lg overflow-hidden w-full max-w-7xl mx-auto animate-fadeIn">
+        {/* Sidebar with Complex Image and Details */}
+        <div className="flex-none md:w-1/2 bg-cover bg-center relative" style={{ backgroundImage: `url(${complex.image})` }}>
+          <div className="absolute inset-0 bg-black opacity-50"></div>
+          <div className="absolute inset-0 p-6 flex flex-col justify-end">
+            <h1 className="text-2xl font-bold text-white">{complex.title}</h1>
+            <p className="text-white mt-2"><strong>Type:</strong> {complex.type}</p>
+            <p className="text-white"><strong>Rent:</strong> {complex.rent} / Hour</p>
+            <p className="text-white mt-4">{complex.description}</p>
+            <p className="text-white mt-2"><strong>Location:</strong> {complex.location}</p>
           </div>
         </div>
-        <form className="mt-8 space-y-6">
-          <div className="flex flex-col lg:flex-row lg:space-x-4">
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700">Name</label>
+
+        {/* Enquiry Form */}
+        <div className="flex-1 p-8">
+          <h2 className="text-3xl font-semibold mb-6 text-gray-800">Booking Enquiry</h2>
+          <form className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Name</label>
+                <input
+                  type="text"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="Enter your name"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Phone Number</label>
+                <input
+                  type="tel"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="Enter your phone number"
+                  required
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Sports Name</label>
               <input
                 type="text"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                placeholder="Enter your name"
+                placeholder="Enter the sport name"
+                required
               />
             </div>
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700">Email</label>
-              <input
-                type="email"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                placeholder="Enter your email"
-              />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Booking Date</label>
+                <input
+                  type="date"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Start Time</label>
+                <input
+                  type="time"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">End Time</label>
+                <input
+                  type="time"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  required
+                />
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col lg:flex-row lg:space-x-4">
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700">Phone</label>
-              <input
-                type="tel"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                placeholder="Enter your phone number"
-              />
-            </div>
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700">Message</label>
-              <textarea
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                rows="4"
-                placeholder="Enter your message"
-              ></textarea>
-            </div>
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-md transition duration-300"
-          >
-            Submit Enquiry
-          </button>
-        </form>
+            <button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-md transition duration-300"
+            >
+              Submit Enquiry
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

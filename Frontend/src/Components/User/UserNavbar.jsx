@@ -1,17 +1,41 @@
-"use client";
-
 import { useState } from "react";
 import { Dialog, DialogPanel, Disclosure } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import {
+  Bars3Icon,
+  XMarkIcon,
+  ChevronDownIcon,
+} from "@heroicons/react/24/outline";
+import { Link,useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const UserNavbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await axios.delete("http://localhost:5000/auth/logout",{
+        withCredentials:true,
+      });
+      toast.success("Logged out successfully", {
+        position: "top-right", // Position for toaster
+      });
+      navigate("/login"); // Redirect user to login page after logout
+    } catch (error) {
+      toast.error("Logout failed. Please try again.", {
+        position: "top-right", // Position for toaster
+      });
+    }
+  };
 
   return (
     <header className="bg-blue-900 text-white w-full fixed top-0 left-0 right-0 z-50 shadow-lg">
-      <nav aria-label="Global" className="flex items-center justify-between p-2 lg:px-6">
+      <nav
+        aria-label="Global"
+        className="flex items-center justify-between p-2 lg:px-6"
+      >
         <div className="flex flex-1 items-center">
           <a className="p-1.5">
             <img
@@ -21,13 +45,22 @@ const UserNavbar = () => {
             />
           </a>
           <div className="hidden lg:flex lg:gap-x-12 ml-6">
-            <Link to="/user" className="text-base font-semibold leading-6 hover:text-blue-300 transition duration-300 ease-in-out">
+            <Link
+              to="/user"
+              className="text-base font-semibold leading-6 hover:text-blue-300 transition duration-300 ease-in-out"
+            >
               Home
             </Link>
-            <Link to="/user/complex" className="text-base font-semibold leading-6 hover:text-blue-300 transition duration-300 ease-in-out">
+            <Link
+              to="/user/complex"
+              className="text-base font-semibold leading-6 hover:text-blue-300 transition duration-300 ease-in-out"
+            >
               All Complexes
             </Link>
-            <Link to="/user/my-bookings" className="text-base font-semibold leading-6 hover:text-blue-300 transition duration-300 ease-in-out">
+            <Link
+              to="/user/my-bookings"
+              className="text-base font-semibold leading-6 hover:text-blue-300 transition duration-300 ease-in-out"
+            >
               My Bookings
             </Link>
           </div>
@@ -56,16 +89,49 @@ const UserNavbar = () => {
           </button>
           {profileMenuOpen && (
             <div className="absolute right-0 top-12 mt-2 w-64 bg-white text-blue-900 rounded-lg shadow-lg z-50">
-              <Link to="/user/profile" className="block px-6 py-3 text-lg hover:bg-blue-100 flex items-center">
-                <svg className="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l6.16-3.422A12.084 12.084 0 0021 9.883M12 14l-6.16-3.422A12.084 12.084 0 013 9.883M12 14v10m0-10l6.16-3.422M12 14l-6.16-3.422M5.86 16.458L3 9.883M18.14 16.458L21 9.883"></path>
+              <Link
+                to="/user/profile"
+                className="block px-6 py-3 text-lg hover:bg-blue-100 flex items-center"
+              >
+                <svg
+                  className="h-6 w-6 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 14l9-5-9-5-9 5 9 5z"
+                  ></path>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 14l6.16-3.422A12.084 12.084 0 0021 9.883M12 14l-6.16-3.422A12.084 12.084 0 013 9.883M12 14v10m0-10l6.16-3.422M12 14l-6.16-3.422M5.86 16.458L3 9.883M18.14 16.458L21 9.883"
+                  ></path>
                 </svg>
                 Profile
               </Link>
-              <Link to="/user/logout" className="block px-6 py-3 text-lg hover:bg-blue-100 flex items-center">
-                <svg className="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+              <Link
+                onClick={handleLogout}
+                className="block px-6 py-3 text-lg hover:bg-blue-100 flex items-center"
+              >
+                <svg
+                  className="h-6 w-6 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 5l7 7-7 7"
+                  ></path>
                 </svg>
                 Log out
               </Link>
@@ -73,7 +139,11 @@ const UserNavbar = () => {
           )}
         </div>
       </nav>
-      <Dialog open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} className="lg:hidden">
+      <Dialog
+        open={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        className="lg:hidden"
+      >
         <div className="fixed inset-0 z-10 bg-blue-900 bg-opacity-80" />
         <DialogPanel className="fixed inset-0 z-20 bg-blue-800 px-6 py-6">
           <div className="flex items-center justify-between">
@@ -112,7 +182,10 @@ const UserNavbar = () => {
                 </Disclosure>
                 <Disclosure as="div" className="-mx-3">
                   <Disclosure.Button className="block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-blue-700">
-                    <Link to="/user/my-bookings" className="block w-full h-full">
+                    <Link
+                      to="/user/my-bookings"
+                      className="block w-full h-full"
+                    >
                       My Bookings
                     </Link>
                   </Disclosure.Button>
@@ -128,7 +201,10 @@ const UserNavbar = () => {
                 </Disclosure>
                 <Disclosure as="div" className="-mx-3">
                   <Disclosure.Button className="block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-white hover:bg-blue-700">
-                    <Link to="/user/logout" className="block w-full h-full">
+                    <Link
+                      onClick={handleLogout}
+                      className="block w-full h-full"
+                    >
                       Log out
                     </Link>
                   </Disclosure.Button>

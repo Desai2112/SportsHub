@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { motion, useAnimation } from 'framer-motion';
 
 const SportsComponent = () => {
   const sportsData = [
@@ -15,42 +16,46 @@ const SportsComponent = () => {
   ];
 
   const containerRef = useRef(null);
+  const controls = useAnimation();
 
   useEffect(() => {
-    const container = containerRef.current;
-
     const moveContainer = () => {
-      if (container) {
-        container.style.transition = 'transform 2s ease'; // Slower transition
-        container.style.transform = 'translateX(-10%)'; // Move container by one-tenth
-
-        setTimeout(() => {
-          container.style.transition = 'none';
+      controls.start({
+        x: '-10%',
+        transition: { duration: 2, ease: 'easeInOut' },
+      }).then(() => {
+        controls.set({ x: 0 });
+        const container = containerRef.current;
+        if (container) {
           container.appendChild(container.firstElementChild);
-          container.style.transform = 'translateX(0)';
-          setTimeout(() => {
-            container.style.transition = 'transform 2s ease'; // Restart transition after resetting
-          }, 0);
-        },237 ); // Adjusted delay to match transition duration
-      }
+        }
+        setTimeout(() => {
+          controls.start({ x: '-10%', transition: { duration: 2, ease: 'easeInOut' } });
+        }, 0);
+      });
     };
 
-    const interval = setInterval(moveContainer, 1950); // Slower interval
+    const interval = setInterval(moveContainer, 1950);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [controls]);
 
   return (
     <div className="container w-full mx-auto px-0 pt-8"> {/* Removed px-4 for full width */}
       <h1 className="text-3xl font-bold mt-8 mb-4 pb-5 text-center">Sports Component</h1>
       <div className="relative overflow-hidden width-screen bg-gray-100 pb-20">
-        <div
+        <motion.div
           ref={containerRef}
-          className="flex items-center w-screen space-x-4 overflow-hidden"
-          style={{ width: `${sportsData.length * 100}%`, transform: 'translateX(0)' }}
+          className="flex items-center space-x-4 overflow-hidden"
+          style={{ width: `${sportsData.length * 100}%` }}
+          animate={controls}
         >
           {sportsData.map((sport) => (
-            <div key={sport.id} className="w-64 text-center">
+            <motion.div
+              key={sport.id}
+              className="w-64 text-center"
+              whileHover={{ scale: 1.05 }} // Add a hover effect
+            >
               <div className="relative w-64 h-64 rounded-lg overflow-hidden">
                 <img
                   src={sport.imageUrl}
@@ -59,9 +64,9 @@ const SportsComponent = () => {
                 />
               </div>
               <p className="mt-2">{sport.name}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

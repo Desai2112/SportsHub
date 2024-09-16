@@ -44,6 +44,6 @@ router.route("/verify-email").get(verifyEmail);
 router.route("/google/:role").get(continueWithGoogle);
 router.route("/google/callback/:role").get(googleCallBack);
 
-router.route("/signup").post(upload.single("profilePic"),addUser);
+router.route("/signup").post(addUser);
 
 export default router;
