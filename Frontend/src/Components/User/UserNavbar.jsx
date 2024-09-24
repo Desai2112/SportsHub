@@ -16,7 +16,7 @@ const UserNavbar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.delete("http://localhost:5000/auth/logout",{
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`,{
         withCredentials:true,
       });
       toast.success("Logged out successfully", {

@@ -14,7 +14,7 @@ const MHomePage = () => (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <CardItem
             title="Total Revenue"
-            value="$45,231.89"
+            value="₹45,231.89"
             percentage="+20.1% from last month"
             Icon={GiMoneyStack} // Money icon from react-icons
             className="bg-gray-800 border border-gray-700"

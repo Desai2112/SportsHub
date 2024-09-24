@@ -19,7 +19,7 @@ const Login = () => {
 
   const onSubmit = (data) => {
     console.log(data);
-    axios.post('http://localhost:5000/auth/login', data,{
+    axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, data,{
       withCredentials:true,
     })
       .then((response) => {

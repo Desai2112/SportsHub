@@ -27,7 +27,7 @@ const AddComplexPage = () => {
   useEffect(() => {
     const fetchSports = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/common/sports');
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/common/sports`);
         if (response.data.success) {
           const sportsOptions = response.data.sports.map((sport) => ({
             value: sport._id,

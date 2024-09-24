@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
@@ -11,6 +12,10 @@ export default defineConfig({
     alias: {
       '@': '/src',
     },
+    define: {
+    // eslint-disable-next-line no-undef
+    'process.env': process.env, // Optional, if you need `process.env`
+  },
   },
 })
 

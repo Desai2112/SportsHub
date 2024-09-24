@@ -171,28 +171,26 @@ const editComplexDetails = async (req: Request, res: Response) => {
         success: false,
       });
     }
-    if (complex.manager !== req.session.user) {
+    const mId = complex.manager.toString();
+    const uId = req.session.user?.toString();
+    // console.log(mId);
+    // console.log(uId);
+    if (mId != uId) {
       return res.status(403).json({
         message: "You are not authorized to edit this complex",
         success: false,
       });
     }
     const {
-      name,
-      address,
-      phone,
       email,
-      city,
+      phone,
       openingTime,
       closingTime,
       pricePerHour,
       description,
     } = req.body;
     if (
-      !name ||
-      !address ||
       !phone ||
-      !city ||
       !email ||
       !openingTime ||
       !closingTime ||
@@ -206,10 +204,7 @@ const editComplexDetails = async (req: Request, res: Response) => {
     const updatedComplex = await SportComplex.findByIdAndUpdate(
       complexId,
       {
-        name: name,
-        address: address,
         phone: phone,
-        city: city,
         email: email,
         openingTime: openingTime,
         closingTime: closingTime,
@@ -222,6 +217,34 @@ const editComplexDetails = async (req: Request, res: Response) => {
       message: "Complex updated successfully",
       success: true,
     });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error try again later.",
+      success: false,
+    });
+  }
+};
+
+const addSportinComplex = async (req: Request, res: Response) => {
+  try {
+    const { complexId, sports } = req.body;
+    if (!complexId || !sports) {
+      return res.status(400).json({
+        message: "Please fill all the fields",
+        success: false,
+      });
+    }
+    const complex = await SportComplex.findByIdAndUpdate({ complexId },{
+      $addToSet: { sports: sports }
+    });
+    if (!complex) {
+      return res.status(400).json({
+        message: "Sport already exists in this complex",
+        success: false,
+      });
+    }
+    
   } catch (error) {
     console.log(error);
     return res.status(500).json({

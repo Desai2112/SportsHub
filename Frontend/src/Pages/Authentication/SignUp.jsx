@@ -47,7 +47,7 @@ const SignUp = () => {
     setSubmittedData(data);
     console.log(data);
     try {
-      const response = await axios.post('http://localhost:5000/auth/signup', data);
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/signup`, data);
       
       console.log(response.data);
       // Handle success scenario as needed

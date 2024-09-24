@@ -68,7 +68,7 @@ const PlayerSignUp = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:5000/auth/signup",
+        `${import.meta.env.VITE_BACKEND_URL}/auth/signup`,
         requestBody,
         {
           headers: {

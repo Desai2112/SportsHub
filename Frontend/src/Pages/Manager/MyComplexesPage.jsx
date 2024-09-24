@@ -21,7 +21,7 @@ const MyComplexesPage = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get("http://localhost:5000/complex/client", {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/complex/client`, {
         headers: {
           "Content-Type": "application/json",
         },
