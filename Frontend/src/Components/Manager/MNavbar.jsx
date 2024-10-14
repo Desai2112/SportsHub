@@ -1,22 +1,47 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
+import axios from "axios";
+
 
 const MNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation(); // Get the current location
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for avatar dropdown
+  const location = useLocation(); // Get the current 
+  const navigate=useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   // Function to determine if a link is active
   const isActive = (path) => location.pathname === path;
+
+
+  const handleLogout = async () => {
+    try {
+      // Axios request to logout endpoint
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`,{
+        withCredentials: true,
+      }) 
+
+      // Redirect to login page
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
 
   return (
     <header className="flex h-16 items-center justify-between bg-[#1E2A38] px-6 text-white shadow-md">
       {/* Logo Section */}
-      <Link  className="flex items-center gap-3">
+      <Link className="flex items-center gap-3">
         <img
           src="https://res.cloudinary.com/dgvslio7u/image/upload/v1720845639/tofmmxz1oj8lvexsqaet.png"
           alt="SportsHub"
@@ -64,14 +89,35 @@ const MNavbar = () => {
       </nav>
 
       {/* User Avatar and Menu Toggle */}
-      <div className="flex items-center gap-4">
+      <div className="relative flex items-center gap-4">
+        {/* Avatar Section */}
         <div className="relative">
           <img
             src="/placeholder-user.jpg"
             alt="Avatar"
-            className="h-10 w-10 rounded-full border-2 border-white object-cover shadow-md hover:shadow-lg transition-shadow duration-300"
+            className="h-10 w-10 rounded-full border-2 border-white object-cover shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+            onClick={toggleDropdown}
           />
+          {isDropdownOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-10 text-black">
+              <Link
+                to="/profile"
+                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                onClick={() => setIsDropdownOpen(false)} // Close dropdown on click
+              >
+                Profile
+              </Link>
+              <Link
+                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                onClick={handleLogout} // Close dropdown on click
+              >
+                Logout
+              </Link>
+            </div>
+          )}
         </div>
+
+        {/* Mobile Menu Toggle */}
         <button
           onClick={toggleMenu}
           className="block md:hidden text-white focus:outline-none"

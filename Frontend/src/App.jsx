@@ -14,6 +14,8 @@ import ViewComplexPage from './Pages/Manager/ViewComplexPage';
 import BookingPage from './Pages/Manager/BookingPage';
 import MaintenancePage from './Pages/Manager/MaintanancePage';
 import AddComplexPage from './Pages/Manager/AddComplexPage';
+import BookNow from './Components/User/BookNow';
+import BookingsPage from './Pages/User/BookingsPage';
 
 const App = () => {
   return (
@@ -24,7 +26,9 @@ const App = () => {
         <Route path="/register" element={<SignUp />} />
         <Route path="/user" element={<HomePage />} />
         <Route path="/manager" element={<MHomePage />} />
-        <Route path="/user/Complex" element={<ShowComplex />} />
+        <Route path="/user/Complexes" element={<ShowComplex />} />
+        <Route path="/user/Complex/:complexId" element={<BookNow />} />
+        <Route path="/user/bookings" element={<BookingsPage />} />
         {/* <Route path="/user/profile" element={<ProfilePage />} /> */}
         <Route path="/manager/complex" element={<MyComplexesPage />} />
         <Route path="/manager/complex/add" element={<AddComplexPage />} />

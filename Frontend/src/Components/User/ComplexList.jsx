@@ -1,60 +1,94 @@
-// import React from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import ComplexCard from "./ComplexCard";
 
 const ComplexList = () => {
-  const complexes = [
-    {
-      id: 1,
-      image:
-        "https://res.cloudinary.com/dgvslio7u/image/upload/v1719653121/Odoo%20Hackathone/dakh0hqbsis1uz6q663z.jpg",
-      type: "Indoor Sports Complex",
-      title: "Elite Sports Center",
-      description:
-        "Elite Sports Center is a state-of-the-art facility offering a wide range of sports amenities including football fields, tennis courts, swimming pools, and a modern gym. It is designed to cater to both professional athletes and sports enthusiasts, providing top-notch training and recreational facilities.",
-      rent: "₹500 - ₹1,500",
-      location: "Nadiad, Gujarat",
-    },
-    {
-      id: 4,
-      image:
-        "https://res.cloudinary.com/dgvslio7u/image/upload/v1719653121/Odoo%20Hackathone/dakh0hqbsis1uz6q663z.jpg",
-      type: "Indoor Sports Complex",
-      title: "Elite Sports Center",
-      description:
-        "Elite Sports Center is a state-of-the-art facility offering a wide range of sports amenities including football fields, tennis courts, swimming pools, and a modern gym. It is designed to cater to both professional athletes and sports enthusiasts, providing top-notch training and recreational facilities.",
-      rent: "₹500 - ₹1,500",
-      location: "Nadiad, Gujarat",
-    },
-    {
-      id: 3,
-      image:
-        "https://res.cloudinary.com/dgvslio7u/image/upload/v1719653121/Odoo%20Hackathone/dakh0hqbsis1uz6q663z.jpg",
-      type: "Indoor Sports Complex",
-      title: "Elite Sports Center",
-      description:
-        "Elite Sports Center is a state-of-the-art facility offering a wide range of sports amenities including football fields, tennis courts, swimming pools, and a modern gym. It is designed to cater to both professional athletes and sports enthusiasts, providing top-notch training and recreational facilities.",
-      rent: "₹500 - ₹1,500",
-      location: "Nadiad, Gujarat",
-    },
-    {
-      id: 2,
-      image:
-        "https://res.cloudinary.com/dgvslio7u/image/upload/v1719653121/Odoo%20Hackathone/sample_image.jpg",
-      type: "Outdoor Sports Complex",
-      title: "Sunshine Sports Arena",
-      description:
-        "Sunshine Sports Arena offers outdoor sports facilities such as cricket pitches, football fields, and running tracks. Ideal for outdoor sports enthusiasts.",
-      rent: "₹300 - ₹1,200",
-      location: "Anand, Gujarat",
-    },
-    // Add more complex objects as needed
-  ];
+  const [complexes, setComplexes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedSport, setSelectedSport] = useState("");
+
+  // Fetch complexes data using Axios
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BACKEND_URL}/complex/all`, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        const fetchedComplexes = response.data.allComplex.map((complex) => ({
+          id: complex._id,
+          image: complex.images[0], // Use the first image in the array
+          type: complex.sports.map((sport) => sport.name).join(", "), // Combine all sport names
+          title: complex.name,
+          description: complex.description,
+          rent: `₹${complex.pricePerHour}`,
+          location: `${complex.city}`,
+        }));
+        setComplexes(fetchedComplexes);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError("Failed to fetch complexes. Please try again later.");
+        setLoading(false);
+      });
+  }, []);
+
+  // Filter complexes based on search term and selected sport
+  const filteredComplexes = complexes.filter((complex) => {
+    const matchesSearch =
+      complex.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      complex.location.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSport =
+      selectedSport === "" || complex.type.toLowerCase().includes(selectedSport.toLowerCase());
+
+    return matchesSearch && matchesSport;
+  });
+
+  if (loading) {
+    return (
+      <div className="text-center text-xl text-white py-8">Loading...</div>
+    );
+  }
+
+  if (error) {
+    return <div className="text-center text-xl text-red-500 py-8">{error}</div>;
+  }
 
   return (
-    <div className="py-8 ">
-      <div className="text-center pt-20 text-2xl font-bold ">All Complexes</div>
-      <div className="flex pt-8 flex-wrap justify-center">
-        {complexes.map((complex) => (
+    <div className="py-8 px-4 bg-gradient-to-b from-[#1E2A38] to-[#2A3B4E] min-h-screen">
+      <div className="text-center text-4xl font-bold text-[#E0E0E0] mb-8">
+        All Complexes
+      </div>
+
+      {/* Search and Filter Section */}
+      <div className="mb-6 flex flex-col md:flex-row justify-between items-center">
+        <div className="relative w-full md:w-1/3 mb-4 md:mb-0">
+          <input
+            type="text"
+            placeholder="Search by name or city..."
+            className="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00B2A9] bg-[#1E2A38] text-white placeholder-gray-400 w-full"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <select
+          className="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00B2A9] bg-[#1E2A38] text-white w-full md:w-1/4 ml-0 md:ml-4"
+          value={selectedSport}
+          onChange={(e) => setSelectedSport(e.target.value)}
+        >
+          <option value="">All Sports</option>
+          <option value="Cricket">Cricket</option>
+          <option value="Soccer">Soccer</option>
+          <option value="Tennis">Tennis</option>
+          <option value="Badminton">Badminton</option>
+          <option value="Table Tennis">Table Tennis</option>
+          <option value="Squash">Squash</option>
+        </select>
+      </div>
+
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
+        {filteredComplexes.map((complex) => (
           <ComplexCard key={complex.id} complex={complex} />
         ))}
       </div>

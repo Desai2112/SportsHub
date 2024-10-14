@@ -26,7 +26,7 @@ const Login = () => {
         console.log(response.data.userDetails.role);
         if(response.data.userDetails.role=="User")
         {
-          window.location.href = '/user';
+          window.location.href = '/user/Complexes';
         }
         else if(response.data.userDetails.role=="Manager")
         {
